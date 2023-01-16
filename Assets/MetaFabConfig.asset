@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e0b2f6e44a47524c810acddf4539cfc, type: 3}
+  m_Name: MetaFabConfig
+  m_EditorClassIdentifier: 
+  gameId: 52c9a381-31d6-48d8-8f09-564f02feb78c
+  email: PaybackJam@outlook.com
+  xAuthorization: VDRqy6Sz6RLgPdp
+  secretKey: game_sk_oK+ChpmefM0onpABIqCEiHSypBriZluYTvjWXRI6Z3r5iubAx3mg2Mt+8ViUhUyA
+  publicKey: game_pk_w9hCG6J5gvogbj7+TG7NGYKboDfvu/wkIIKNTsCcSN/jRG8320KTaN4BcR/+zY7n
+  wallet: 0xc33985f2f4F3DD9be94360b75f227Ab866CA39c5
+  walletId: de9d383a-c10f-4f5b-8e7a-a675f140078b
+  fundingWallet: 0x4A9bfFF759a2Da61CF86dd0FB26A5C17504228BD
+  fundingWalletId: f631f1ce-400e-446a-ba21-a53c39461912
+  currencyId: ac110e14-752b-4531-98ce-3318064a08f4
+  contractId: 99eac9bf-cc1b-4528-ad2b-b398ecd5f52b
+  shopId: 5f1cc3a0-e698-4752-93a3-34cf84b37088
+  collectionId: ce7a3e32-5078-473e-bb0d-5d9eee82cc41
