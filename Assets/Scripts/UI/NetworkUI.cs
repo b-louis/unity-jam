@@ -31,5 +31,6 @@ public class NetworkUI : NetworkBehaviour
         playerCountText.text = "Players : "+_count.Value.ToString();
         if (!IsServer) return;
         _count.Value = NetworkManager.Singleton.ConnectedClients.Count;
+
     }
 }

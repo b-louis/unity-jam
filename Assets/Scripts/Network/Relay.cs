@@ -55,7 +55,7 @@ public class Relay : MonoBehaviour
             Debug.LogError(e);
         }
     }
-    private async void JoinRelay(string joinCode)
+    public async void JoinRelay(string joinCode)
     {
         try
         {
