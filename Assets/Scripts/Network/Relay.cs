@@ -12,10 +12,16 @@ using Unity.Netcode.Transports.UTP;
 public class Relay : MonoBehaviour
 {
     public static Relay Singleton;
+    private static Dictionary<ulong, PlayerData> clientData ;
+
     // Start is called before the first frame update
     private void Awake()
     {
         Singleton = this;
+    }
+    private void OnEnable()
+    {
+        
     }
     private async void Start()
     {
@@ -48,6 +54,8 @@ public class Relay : MonoBehaviour
             );
 
             Debug.Log("Join code is = " + joinCode);
+            clientData = new Dictionary<ulong, PlayerData>();
+            clientData[NetworkManager.Singleton.LocalClientId] = new PlayerData(ManagersInGame.Player.name);
             NetworkManager.Singleton.StartHost();
             Debug.Log("Join code is = " + joinCode);
         }catch(RelayServiceException e)
@@ -55,7 +63,7 @@ public class Relay : MonoBehaviour
             Debug.LogError(e);
         }
     }
-    public async void JoinRelay(string joinCode)
+    public static async void JoinRelay(string joinCode)
     {
         try
         {
@@ -70,6 +78,7 @@ public class Relay : MonoBehaviour
                 joinAllocation.HostConnectionData
             );
 
+            clientData[NetworkManager.Singleton.LocalClientId] = new PlayerData(ManagersInGame.Player.name);
             NetworkManager.Singleton.StartClient();
             //NetworkManager.Singleton.Shutdown();
         }
@@ -77,5 +86,15 @@ public class Relay : MonoBehaviour
         {
             Debug.LogError(e);
         }
+    }
+    
+    public static PlayerData? GetPlayerData(ulong clientId)
+    {
+        if (clientData.TryGetValue(clientId, out PlayerData playerData))
+        {
+            return playerData;
+        }
+
+        return null;
     }
 }

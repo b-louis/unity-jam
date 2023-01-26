@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerManagerNetwork))]
+[RequireComponent(typeof(GameMenuUiController))]
 public class ManagersInGame : NetworkBehaviour
 {
-    public static PlayerManagerNetwork PlayerNetwork;
+    public static GameMenuUiController GameUiController;
     public static GameEventsManager GameEvents;
+    [SerializeField]
+    private PlayerSO _player;
+    public static PlayerSO Player;
+
     private void Awake()
     {
+        Player = _player;
         GameEvents = GetComponent<GameEventsManager>();
-        PlayerNetwork = GetComponent<PlayerManagerNetwork>();
-        Debug.Log(PlayerNetwork);
+        GameUiController = GetComponent<GameMenuUiController>();
+        Debug.Log(GameUiController);
 
     }
     void Start()

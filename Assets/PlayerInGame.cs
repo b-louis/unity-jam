@@ -35,6 +35,7 @@ public class PlayerInGame : NetworkBehaviour
     public NetworkVariable<int> health = new NetworkVariable<int>(100);
     public NetworkVariable<bool> alive = new NetworkVariable<bool>(true);
     public NetworkVariable<PlayerSerializedData> PlayerDataS;
+    private NetworkVariable<FixedString32Bytes> displayName = new NetworkVariable<FixedString32Bytes>();
 
     //public NetworkVariable<float> health = new NetworkVariable<float>(100f);
 
@@ -81,12 +82,15 @@ public class PlayerInGame : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
-        Debug.Log("Test print");
-        PlayerDataS = new NetworkVariable<PlayerSerializedData>(
-        new PlayerSerializedData(PlayerData.Username, PlayerData.AccessToken)
-        );
-        Debug.Log(this.PlayerDataS.Value.username);
-        ManagersInGame.PlayerNetwork.PlayerJoinServerRpc(this.PlayerDataS.Value);
+        if (!IsServer) { return; }
+
+        PlayerData? playerData = Relay.GetPlayerData(OwnerClientId);
+
+        if (playerData.HasValue)
+        {
+            displayName.Value = playerData.Value.Username;
+        }
+
         PlayerText.text = PlayerDataS.Value.username.ToString();
         health.Value = 100;
         alive.Value = true;
