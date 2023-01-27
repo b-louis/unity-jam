@@ -41,7 +41,7 @@ public class ProjectileBehavior : NetworkBehaviour
         Destroy(gameObject);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership =false)]
 
     void DestroyObjectServerRpc()
     {
