@@ -5,6 +5,7 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using Unity.Collections;
+using System;
 
 public struct PlayerSerializedData : INetworkSerializable
 {
@@ -41,6 +42,15 @@ public class PlayerInGame : NetworkBehaviour
 
     public int ownerId;
     // Start is called before the first frame update
+    private void OnEnable()
+    {
+        displayName.OnValueChanged += HandleDisplayNameChanged;
+    }
+
+    private void OnDisable()
+    {
+        displayName.OnValueChanged -= HandleDisplayNameChanged;
+    }
     void Start()
     {
         //if (!IsOwner) return;
@@ -80,21 +90,36 @@ public class PlayerInGame : NetworkBehaviour
     {
         Spawn();
     }
-    public override void OnNetworkSpawn()
+    private IEnumerator waitForData()
     {
-        if (!IsServer) { return; }
+        yield return new WaitForSeconds(2f);
+        PlayerData playerData = Relay.Singleton.GetPlayerData(OwnerClientId);
+        ChangeNameServerRpc(playerData);
 
-        PlayerData? playerData = Relay.GetPlayerData(OwnerClientId);
-
-        if (playerData.HasValue)
-        {
-            displayName.Value = playerData.Value.Username;
-        }
-
-        PlayerText.text = PlayerDataS.Value.username.ToString();
-        health.Value = 100;
-        alive.Value = true;
     }
 
-    
+    [ServerRpc]
+    private void ChangeNameServerRpc(PlayerData playerData)
+    {
+        displayName.Value = playerData.Username;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) return;
+        Relay.Singleton.setDataServerRpc(OwnerClientId);
+        StartCoroutine(waitForData());
+        health.Value = 100;
+        alive.Value = true;
+        Debug.Log(Relay.Singleton.clientData[0]);
+        Debug.Log(Relay.Singleton.clientData[1]);
+
+    }
+
+    private void HandleDisplayNameChanged(FixedString32Bytes oldDisplayName, FixedString32Bytes newDisplayName)
+    {
+        Debug.Log("CHANGE");
+
+        PlayerText.text = newDisplayName.ToString();
+    }
 }

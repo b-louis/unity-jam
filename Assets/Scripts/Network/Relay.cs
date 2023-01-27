@@ -8,20 +8,24 @@ using UnityEngine;
 using IngameDebugConsole;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Collections;
 
-public class Relay : MonoBehaviour
+public class Relay : NetworkBehaviour
 {
     public static Relay Singleton;
-    private static Dictionary<ulong, PlayerData> clientData ;
+    public NetworkList<FixedString32Bytes> clientData;
 
     // Start is called before the first frame update
     private void Awake()
     {
         Singleton = this;
+        clientData = new NetworkList<FixedString32Bytes>();
+        //NetworkManager.Singleton.OnClientConnectedCallback += setDataServerRpc;
+
     }
     private void OnEnable()
     {
-        
+
     }
     private async void Start()
     {
@@ -54,16 +58,20 @@ public class Relay : MonoBehaviour
             );
 
             Debug.Log("Join code is = " + joinCode);
-            clientData = new Dictionary<ulong, PlayerData>();
-            clientData[NetworkManager.Singleton.LocalClientId] = new PlayerData(ManagersInGame.Player.name);
+            Debug.Log(clientData);
+            Debug.Log(OwnerClientId);
+            Debug.Log(NetworkManager.Singleton.LocalClientId);
+            Debug.Log((int)NetworkManager.Singleton.LocalClientId);
             NetworkManager.Singleton.StartHost();
+            setDataServerRpc(OwnerClientId);
+            Debug.Log(clientData.Count); 
             Debug.Log("Join code is = " + joinCode);
         }catch(RelayServiceException e)
         {
             Debug.LogError(e);
         }
     }
-    public static async void JoinRelay(string joinCode)
+    public async void JoinRelay(string joinCode)
     {
         try
         {
@@ -78,7 +86,6 @@ public class Relay : MonoBehaviour
                 joinAllocation.HostConnectionData
             );
 
-            clientData[NetworkManager.Singleton.LocalClientId] = new PlayerData(ManagersInGame.Player.name);
             NetworkManager.Singleton.StartClient();
             //NetworkManager.Singleton.Shutdown();
         }
@@ -88,13 +95,35 @@ public class Relay : MonoBehaviour
         }
     }
     
-    public static PlayerData? GetPlayerData(ulong clientId)
+    [ServerRpc(RequireOwnership = false)]
+    public void setDataServerRpc(ulong clientId)
     {
-        if (clientData.TryGetValue(clientId, out PlayerData playerData))
+        if (IsServer && IsOwner)
         {
-            return playerData;
+            if (clientData.Count < 1)
+            {
+                clientData.Add("Player1");
+                clientData.Add("Player2");
+
+
+            }
+        }
+        if (IsOwner)
+        {
+            Debug.Log("My name");
+            clientData[(int)clientId] = clientId.ToString();
         }
 
-        return null;
+        Debug.Log(clientData[0]);
+        Debug.Log(clientData[1]);
+
+    }
+
+    public PlayerData GetPlayerData(ulong clientId)
+    {
+        Debug.Log(clientData.Count);
+        Debug.Log(clientData[(int)clientId]);
+
+        return new PlayerData(clientData[(int)clientId].ToString());
     }
 }

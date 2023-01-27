@@ -18,7 +18,7 @@ public class GameMenuUiController : MonoBehaviour
     }
     public void OnPlayerJoin()
     {
-        Relay.JoinRelay(RelayCode.text);
+        Relay.Singleton.JoinRelay(RelayCode.text);
     }
 
 }

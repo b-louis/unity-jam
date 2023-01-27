@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87f99d0ceb2d11f419a530a114a37f99, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  Username: eee
+  Username: 123
   AccessToken: zzz
   loadout: eeee
   WalletId: fff
