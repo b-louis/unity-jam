@@ -102,6 +102,11 @@ public class Relay : NetworkBehaviour
         }
     }
     
+    public void Leaving()
+    {
+        NetworkManager.Singleton.Shutdown();
+
+    }
     [ServerRpc(RequireOwnership = false)]
     public void setDataServerRpc(ulong clientId)
     {
@@ -169,6 +174,13 @@ public class Relay : NetworkBehaviour
 
         }
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RematchServerRpc()
+    {
+        PlacePlayer(0);
+        PlacePlayer(1);
+    }
     public void PlacePlayer(ulong clientId)
     {
         Debug.LogError("geegeg "+ clientId);
@@ -186,7 +198,7 @@ public class Relay : NetworkBehaviour
         }
 
         // Send a message to the server to set the local client's team
-        playerinGame.SpawnPos(Spawns[(int)clientId]);
+        playerinGame.SpawnPosClientRpc(Spawns[(int)clientId]);
     }
     private IEnumerator MyWaitForSec(int seconds)
     {

@@ -5,34 +5,49 @@ using UnityEngine;
 
 public class ProjectileBehavior : NetworkBehaviour
 {
-    public float Speed = 5.0f;
+    public float Speed = 20.0f;
     public float DestroyTime = 2f;
     public int Damage = 5;
+    public bool Stop = false;
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(DestroyNetworkObject(DestroyTime));
+        //StartCoroutine(DestroyNetworkObject(DestroyTime));
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Stop) return;
         transform.Translate(0, 0, Speed * Time.deltaTime);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("ENTER");
+        Debug.LogWarning("ENTER");
         PlayerInGame player = other.GetComponent<PlayerInGame>();
+        ShootBehavior playerShoot = other.GetComponent<ShootBehavior>();
+
         if (player != null)
         {
-            Debug.Log("AIE!");
+            if (Stop)
+            {
+                playerShoot.canShoot = true;
+                DestroyObjectServerRpc();
 
-            player.HurtServerRpc(Damage);
+            }
+            else
+            {
+                player.HurtServerRpc(Damage);
+            }
+        }
+        else
+        {
+            Stop = true;
         }
         if (!IsOwner && gameObject != null) return;
-        DestroyObjectServerRpc();
-        Destroy(gameObject);
+/*        DestroyObjectServerRpc();
+        Destroy(gameObject);*/
     }
     IEnumerator DestroyNetworkObject(float timeToDestroy)
     {

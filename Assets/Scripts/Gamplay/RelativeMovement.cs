@@ -32,23 +32,51 @@ public class RelativeMovement : NetworkBehaviour {
 
 	private CharacterController charController;
 	private Animator animator;
-	private Camera cam;
+    private PlayerInGame pig;
+    private Camera cam;
 	public Vector3 mousePoint;
+	private bool spawning = true;
+	private Vector3 spawnpoint;
 	// Use this for initialization
 	void Start() {
 		vertSpeed = minFall;
 		cam = Camera.main;
 		charController = GetComponent<CharacterController>();
 		animator = GetComponent<Animator>();
+		pig = GetComponent<PlayerInGame>();
 	}
-	
+	public void Spawn(Vector3 pos)
+    {
+		spawning = true;
+		spawnpoint = pos;
+		StartCoroutine(SpawnWait());
+	}
+
+	IEnumerator SpawnWait()
+	{
+		yield return new WaitForSeconds(0.5f);
+		spawning = false;
+
+
+	}
 	// Update is called once per frame
 	void Update() {
-        if (onwnerMode)
+
+		if (onwnerMode)
         {
 
 			if (!IsOwner) return;
         }
+        if (!pig.alive.Value)
+        {
+			return;
+        }
+        if (spawning)
+		{
+			charController.transform.position = spawnpoint;
+			return;
+		}
+
 		// Mouse rotation
 		Vector3 mousePos = Input.mousePosition;
 		//Vector3 mousePoint = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 20));

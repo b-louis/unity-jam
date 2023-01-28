@@ -33,11 +33,11 @@ public class PlayerInGame : NetworkBehaviour
     public TextMeshProUGUI PlayerText;
     public TextMeshProUGUI PlayerHealth;
 
-    public NetworkVariable<int> health = new NetworkVariable<int>(100);
-    public NetworkVariable<bool> alive = new NetworkVariable<bool>(true);
+    public NetworkVariable<int> health = new NetworkVariable<int>(10);
+    public NetworkVariable<bool> alive = new NetworkVariable<bool>(false);
     public NetworkVariable<PlayerSerializedData> PlayerDataS;
     private NetworkVariable<FixedString32Bytes> displayName = new NetworkVariable<FixedString32Bytes>();
-
+    private RelativeMovement rm;
     //public NetworkVariable<float> health = new NetworkVariable<float>(100f);
 
     public ulong ownerId;
@@ -47,6 +47,7 @@ public class PlayerInGame : NetworkBehaviour
         displayName.OnValueChanged += HandleDisplayNameChanged;
         health.OnValueChanged += HandleHealthChanged;
         alive.OnValueChanged += HandleAliveChanged;
+        rm = GetComponent<RelativeMovement>();
 
     }
 
@@ -65,8 +66,7 @@ public class PlayerInGame : NetworkBehaviour
     // Update is called once per frame
     public void Hurt(int damage)
     {
-        if (!IsOwner) return;
-        if (health.Value - damage < 0)
+        if (health.Value - damage <= 0)
         {
             health.Value = 0;
             alive.Value = false;
@@ -84,15 +84,25 @@ public class PlayerInGame : NetworkBehaviour
     }
     public void SpawnPos(Vector3 pos)
     {
-        if (!IsOwner) return;
-        transform.position = pos;
-        health.Value = 100;
+        /*        if (!IsOwner) return;
+        */
+        rm.Spawn(pos);
+        health.Value = 10;
+        alive.Value = true;
+    }
+    [ClientRpc]
+    public void SpawnPosClientRpc(Vector3 pos)
+    {
+        /*        if (!IsOwner) return;
+        */
+        rm.Spawn(pos);
+        health.Value = 10;
         alive.Value = true;
     }
     public void Spawn()
     {
         if (!IsOwner) return;
-        health.Value = 100;
+        health.Value = 10;
         alive.Value = true;
     }
     [ServerRpc]
@@ -125,16 +135,16 @@ public class PlayerInGame : NetworkBehaviour
         Relay.Singleton.setDataServerRpc(NetworkManager.Singleton.LocalClientId);
         Relay.Singleton.PlayerJoinServerRpc();
         StartCoroutine(waitForData());
-        health.Value = 100;
-        alive.Value = true;
 /*        Debug.Log(Relay.Singleton.clientData[0]);
         Debug.Log(Relay.Singleton.clientData[1]);*/
         //RelativeMovement rm = GetComponent<RelativeMovement>();
-        transform.position = Relay.Singleton.Spawns[(int)NetworkManager.Singleton.LocalClientId];
+        Vector3 pos = Relay.Singleton.Spawns[(int)NetworkManager.Singleton.LocalClientId];
+        rm.Spawn(pos);
         Debug.Log("SPAXN : " + Relay.Singleton.Spawns[(int)NetworkManager.Singleton.LocalClientId]);
         Debug.Log("SPAXN1 : " + Relay.Singleton.Spawns[0]);
         Debug.Log("SPAXN2 : " + Relay.Singleton.Spawns[1]);
         Debug.Log("SPAXN3 : " + (int)NetworkManager.Singleton.LocalClientId);
+        Spawn();
 
 
     }

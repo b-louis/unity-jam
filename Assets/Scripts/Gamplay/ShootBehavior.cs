@@ -12,13 +12,15 @@ public class ShootBehavior : NetworkBehaviour
     private GameObject _projectile;
 
     public float RateOfFire;
+    public bool canShoot = true;
     // Start is called before the first frame update
     // Update is called once per frame
     void Update()
     {
         if (!IsOwner) return;
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && canShoot)
         {
+            canShoot = false;
             _mousePos = GetComponent<RelativeMovement>().mousePoint;
             Ray ray = new Ray(transform.position, _mousePos- transform.position);
             RaycastHit hit;
