@@ -52,7 +52,10 @@ public class PlayerInGame : NetworkBehaviour
         alive.OnValueChanged += HandleAliveChanged;
 
         rm = GetComponent<RelativeMovement>();
-
+        Debug.LogError("sono");
+        ManagersInGame.SoundManager.PlayOnceServerRpc(
+        "death"
+        );
 
 
     }
@@ -173,6 +176,9 @@ public class PlayerInGame : NetworkBehaviour
     private void HandlingDeath()
     {
         // 
+        ManagersInGame.SoundManager.PlayOnceClientRpc(
+    "death"
+    );
         Relay.Singleton.EndingGameServerRpc(NetworkManager.Singleton.LocalClientId);
     }
     private void HandleDisplayNameChanged(FixedString32Bytes oldDisplayName, FixedString32Bytes newDisplayName)

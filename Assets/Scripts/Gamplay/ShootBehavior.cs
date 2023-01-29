@@ -55,8 +55,17 @@ public class ShootBehavior : NetworkBehaviour
     [ServerRpc]
     private void ShootServerRpc()
     {
+        ManagersInGame.SoundManager.PlayOnceClientRpc(
+            "spear"
+           
+            ) ;
         _projectile = Instantiate(projectilePrefab) as GameObject;
         _projectile.transform.position = transform.TransformPoint(Vector3.forward * 3.5f);
+        _projectile.transform.position = new Vector3(
+            _projectile.transform.position.x,
+            0.5f,
+            _projectile.transform.position.z
+            );
         _projectile.transform.rotation = transform.rotation;
         _projectile.GetComponent<NetworkObject>().Spawn();
     }

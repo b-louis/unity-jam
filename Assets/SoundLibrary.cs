@@ -14,6 +14,9 @@ public class SoundLibrary : ScriptableObject
     public AudioClip missSound;
     public AudioClip deathSound;
     public AudioClip walkSound;
+    public AudioClip reload;
+    public AudioClip empty;
+    //public AudioClip walkSound;
 
 
 }

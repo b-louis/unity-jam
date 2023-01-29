@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2c85286f39445449af9d5d99c12befe, type: 3}
   m_Name: Sounds
   m_EditorClassIdentifier: 
-  buttonSound: {fileID: 0}
+  buttonSound: {fileID: 8300000, guid: 0e8cd7a38bf8c6c448992d68a28f03f5, type: 3}
   winSound: {fileID: 0}
   loseSound: {fileID: 0}
   joinSound: {fileID: 0}
   spearSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  missSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: c9edfd27b48b19e49aa409fbf450766a, type: 3}
+  missSound: {fileID: 8300000, guid: 1c35288479cd83d4d879f2b3e43f862f, type: 3}
+  deathSound: {fileID: 8300000, guid: 27a6b076412bdc74a88ccacc62b34c5d, type: 3}
   walkSound: {fileID: 0}

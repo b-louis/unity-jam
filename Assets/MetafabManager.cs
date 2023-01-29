@@ -69,7 +69,11 @@ public class MetafabManager : MonoBehaviour
 			var response = await Metafab.PlayersApi.CreatePlayer(new CreatePlayerRequest(username, password));
 			Debug.Log($"Created player: {response}");
 			Managers.Player.Username = username;
+			Managers.Player.Playerid = response.id;
+			Managers.Player.Password = password;
 			Managers.Player.AccessToken = response.accessToken;
+			Managers.Player.WalletId = response.walletId;
+			Managers.Player.WalletAdress = response.wallet.address;
 			return 0;
 
 		}

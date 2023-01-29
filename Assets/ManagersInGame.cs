@@ -8,6 +8,7 @@ public class ManagersInGame : NetworkBehaviour
 {
     public static GameMenuUiController GameUiController;
     public static GameEventsManager GameEvents;
+    public static SoundGameManager SoundManager;
     [SerializeField]
     private PlayerSO _player;
     public static PlayerSO Player;
@@ -17,6 +18,7 @@ public class ManagersInGame : NetworkBehaviour
         Player = _player;
         GameEvents = GetComponent<GameEventsManager>();
         GameUiController = GetComponent<GameMenuUiController>();
+        SoundManager = GetComponent<SoundGameManager>();
         Debug.Log(GameUiController);
 
     }

@@ -45,17 +45,26 @@ public class ProjectileBehavior : NetworkBehaviour
         {
             if (Stop)
             {
-                playerShoot.canShoot = true;
+                playerShoot.canShoot = true; 
+                ManagersInGame.SoundManager.PlayOnceClientRpc(
+     "reload"
+     );
                 DestroyObjectServerRpc();
 
             }
             else
             {
+             ManagersInGame.SoundManager.PlayOnceClientRpc(
+               "hit"
+               );
                 player.HurtServerRpc(Damage);
             }
         }
         else
         {
+            ManagersInGame.SoundManager.PlayOnceClientRpc(
+    "miss"
+    );
             Stop = true;
         }
         if (!IsOwner && gameObject != null) return;
