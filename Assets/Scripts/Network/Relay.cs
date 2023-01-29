@@ -10,12 +10,14 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Collections;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 public class Relay : NetworkBehaviour
 {
     public static Relay Singleton;
     public NetworkList<FixedString32Bytes> clientData;
     public NetworkVariable<bool> GameStarted;
+    public NetworkVariable<bool> GameIsReady;
 
     public List<Vector3> Spawns;
     // Start is called before the first frame update
@@ -36,7 +38,7 @@ public class Relay : NetworkBehaviour
     private async void Start()
     {
         DebugLogConsole.AddCommand("createRelay", "creates Realy ", CreateRelay);
-        DebugLogConsole.AddCommand<string>("joinRelay", "join Realy ", JoinRelay);
+        //DebugLogConsole.AddCommand<string>("joinRelay", "join Realy ", JoinRelay);
 
 
         await UnityServices.InitializeAsync();
@@ -49,7 +51,7 @@ public class Relay : NetworkBehaviour
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
     }
-    public async void CreateRelay()
+    public async UniTask<string> CreateRelay()
     {
         try
         {
@@ -73,12 +75,15 @@ public class Relay : NetworkBehaviour
             setDataServerRpc(OwnerClientId);
             Debug.Log(clientData.Count); 
             Debug.Log("Join code is = " + joinCode);
+            return joinCode;
         }catch(RelayServiceException e)
         {
             Debug.LogError(e);
+            return "";
+
         }
     }
-    public async void JoinRelay(string joinCode)
+    public async UniTask<int> JoinRelay(string joinCode)
     {
         try
         {
@@ -95,10 +100,12 @@ public class Relay : NetworkBehaviour
 
             NetworkManager.Singleton.StartClient();
             //NetworkManager.Singleton.Shutdown();
+            return 0;
         }
         catch (RelayServiceException e)
         {
             Debug.LogError(e);
+            return 1;
         }
     }
     
@@ -151,10 +158,13 @@ public class Relay : NetworkBehaviour
         if (NetworkManager.Singleton.LocalClientId == losingClientId)
         {
             Debug.LogWarning("You lose homie ! " + NetworkManager.Singleton.LocalClientId +" "+ losingClientId);
+            _ = Managers.Metafab.TransfertCurrensyF2("to", "from", 10f);
+
         }
         else
         {
             Debug.LogWarning("Nice play Dawg " + NetworkManager.Singleton.LocalClientId + " " + losingClientId);
+            _ = Managers.Metafab.TransfertCurrensyF2("from", "to", 10f);
         }
     }
 
@@ -167,7 +177,7 @@ public class Relay : NetworkBehaviour
         {
             // We start the game :
             Debug.Log("Game: Ca va commencer");
-
+            GameIsReady.Value = true;
             StartCoroutine(DelayGameStart(3));
             // Place Players
             // Unlock Players

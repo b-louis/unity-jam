@@ -14,6 +14,7 @@ public class PlayerSO : ScriptableObject
     public int weapon;
     public int shades;
     public int hat;
+    public string Playerid;
 
-    public string Password { get; internal set; }
+    public string Password { get; set; }
 }

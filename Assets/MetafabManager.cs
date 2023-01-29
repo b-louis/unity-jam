@@ -6,6 +6,7 @@ using MetafabSdk;
 using IngameDebugConsole;
 using System;
 using System.Threading.Tasks;
+using UnityEngine.Networking;
 
 public class MetafabManager : MonoBehaviour
 {
@@ -46,6 +47,7 @@ public class MetafabManager : MonoBehaviour
 			var response = await Metafab.PlayersApi.AuthPlayer(username, password);
 			Debug.Log($"Created player: {response}");
 			Managers.Player.Username = username;
+			Managers.Player.Playerid = response.id;
 			Managers.Player.Password = password;
 			Managers.Player.AccessToken = response.accessToken;
 			Managers.Player.WalletId = response.walletId;
@@ -116,6 +118,8 @@ public class MetafabManager : MonoBehaviour
 			Debug.Log($"Player: {response}");
 			Managers.Player.Balance = response;
 			Managers.GameEvents.BalanceChangedEvent.Invoke(response);
+            await GetPlayerData();
+			GetData();
 
 		}
 		catch (Exception ex)
@@ -127,15 +131,43 @@ public class MetafabManager : MonoBehaviour
 		// Envoi d'un message vers l'UI et les autres managers pour passer à l'etape suivante si tout ok
 		// Sinon renvoi l'erreur sur l'Ui et demande a l'user de recommencer
 	}
-	// buy lootbox
+	[Serializable]
+	public class PlayerData { 
+		public string updatedAt; 
+		public List<string> protectedData;  
+		public PublicData publicData; 
+	}
+	[Serializable]
+	public class PublicData
+	{
+		public string weapon;
 
-	/*
-	 
-	 ---------------- 
-	 
-	 */
-	// execute shop offer
-	public async UniTask UseShopOffer(float offerId)
+	}
+	public void GetData() { StartCoroutine(FetchData()); }
+	public IEnumerator FetchData()
+	{
+		using (UnityWebRequest request = UnityWebRequest.Get("https://api.trymetafab.com/v1/players/"+ "d9c95194-fbcf-4bc4-b6f0-f9d0e311081e" + "/data?sdk=unity"))
+		{
+			yield return request.SendWebRequest(); 
+			if (request.result == UnityWebRequest.Result.ConnectionError) { Debug.Log(request.error); }
+			else
+			{ 
+				var playerData= JsonUtility.FromJson<PlayerData>(request.downloadHandler.text);
+				Debug.LogError(playerData.publicData.weapon);
+
+				Debug.LogError(request.downloadHandler.text);
+			}
+		}
+	}
+				// buy lootbox
+
+				/*
+
+				 ---------------- 
+
+				 */
+				// execute shop offer
+				public async UniTask UseShopOffer(float offerId)
     {
 		Metafab.SecretKey = Managers.Player.AccessToken;
 		Metafab.Password = Managers.Player.Password;
@@ -156,6 +188,11 @@ public class MetafabManager : MonoBehaviour
 		var transfer = await Metafab.CurrenciesApi.TransferCurrency(MetaFabConfig.currencyId, new TransferCurrencyRequest(address, Managers.Player.WalletId,amout,1));
 		//var currencyOffer = offers[offers.Count - 2];
 	}
+	public async UniTaskVoid TransfertCurrensyF2(string address, string walletid, float amout)
+	{
+		var transfer = await Metafab.CurrenciesApi.TransferCurrency(MetaFabConfig.currencyId, new TransferCurrencyRequest(address, walletid, amout, 1));
+		//var currencyOffer = offers[offers.Count - 2];
+	}
 	public async UniTask TransfertItem(float collectionItemId, string address,int quantity = 1)
 	{
 		Metafab.SecretKey = Managers.Player.AccessToken;
@@ -172,6 +209,16 @@ public class MetafabManager : MonoBehaviour
     {
 		var itemBalances = await Metafab.ItemsApi.GetCollectionItemBalances(MetaFabConfig.collectionId, Managers.Player.WalletAdress, Managers.Player.WalletId);
 		return itemBalances;
+
+	}
+
+	public async UniTask GetPlayerData()
+	{
+
+		var response = await Metafab.PlayersApi.GetPlayerData("d9c95194-fbcf-4bc4-b6f0-f9d0e311081e");
+		var data = (PublicData) response.publicData;
+		Debug.LogError(response);
+		Debug.LogError(data);
 	}
 	private void testEvent()
     {
