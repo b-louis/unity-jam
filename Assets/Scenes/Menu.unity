@@ -3343,7 +3343,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1224850209
 Transform:
@@ -4515,6 +4515,8 @@ MonoBehaviour:
   Username: {fileID: 898303396}
   Password: {fileID: 1028469310}
   ErrorText: {fileID: 1159453898}
+  LoginButton: {fileID: 1041665709}
+  SignButton: {fileID: 1546784300}
   LoginPage: {fileID: 1680278081}
   MainPage: {fileID: 1600490687}
 --- !u!4 &1550614141

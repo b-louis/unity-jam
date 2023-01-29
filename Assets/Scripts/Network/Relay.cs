@@ -11,6 +11,7 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Collections;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using TMPro;
 
 public class Relay : NetworkBehaviour
 {
@@ -18,7 +19,8 @@ public class Relay : NetworkBehaviour
     public NetworkList<FixedString32Bytes> clientData;
     public NetworkVariable<bool> GameStarted;
     public NetworkVariable<bool> GameIsReady;
-
+    public GameObject EndGame;
+    public TextMeshProUGUI TextEnd;
     public List<Vector3> Spawns;
     // Start is called before the first frame update
     private void Awake()
@@ -111,7 +113,8 @@ public class Relay : NetworkBehaviour
     
     public void Leaving()
     {
-        NetworkManager.Singleton.Shutdown();
+
+        Destroy(NetworkManager.gameObject);
         Managers.GameSceneManager.GoMenu();
     }
     [ServerRpc(RequireOwnership = false)]
@@ -151,19 +154,31 @@ public class Relay : NetworkBehaviour
         GameStarted.Value = false;
         EndingGameClientRpc(losingClientId);
     }
+    private IEnumerator DelayGameEnd(int seconds)
+    {
+
+        yield return new WaitForSeconds(seconds);
+        Debug.Log("Game: Ca fini");
+        NetworkManager.Singleton.Shutdown();
+        Leaving();
+    }
 
     [ClientRpc]
     public void EndingGameClientRpc(ulong losingClientId)
     {
+        //
+        EndGame.SetActive(true);
         if (NetworkManager.Singleton.LocalClientId == losingClientId)
         {
             Debug.LogWarning("You lose homie ! " + NetworkManager.Singleton.LocalClientId +" "+ losingClientId);
-
+            TextEnd.text = "You lose !";
+            StartCoroutine(DelayGameEnd(3));
         }
         else
         {
             Debug.LogWarning("Nice play Dawg " + NetworkManager.Singleton.LocalClientId + " " + losingClientId);
-            _ = Managers.Metafab.TransfertCurrensyWin();
+            TextEnd.text = "You win !";
+            Win();
         }
     }
 
@@ -177,7 +192,7 @@ public class Relay : NetworkBehaviour
             // We start the game :
             Debug.Log("Game: Ca va commencer");
             GameIsReady.Value = true;
-            //Pay();
+            PayClientRpc();
             StartCoroutine(DelayGameStart(3));
             // Place Players
             // Unlock Players
@@ -189,6 +204,7 @@ public class Relay : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void RematchServerRpc()
     {
+
         PlacePlayer(0);
         PlacePlayer(1);
         GameStarted.Value = true;
@@ -211,9 +227,17 @@ public class Relay : NetworkBehaviour
         // Send a message to the server to set the local client's team
         playerinGame.SpawnClientRpc();
     }
-    private async void Pay()
+    [ClientRpc]
+    private void PayClientRpc()
     {
-        await Managers.Metafab.TransfertCurrensyToPlay();
+        _ = Managers.Metafab.TransfertCurrensyPlay();
+
+    }
+    private async void Win()
+    {
+        await Managers.Metafab.TransfertCurrensyWin();
+        StartCoroutine(DelayGameEnd(2));
+
     }
     private IEnumerator DelayGameStart(int seconds)
     {

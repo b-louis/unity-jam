@@ -14,6 +14,7 @@ public class GameMenuUiController : MonoBehaviour
     public TMP_InputField RelayCode;
     public GameObject Main;
     public GameObject CountDown;
+    public GameObject Endgame;
     public TextMeshProUGUI RelayCodeToFriend;
     public Button CreateParty;
     public Button JoinParty;
@@ -34,6 +35,10 @@ public class GameMenuUiController : MonoBehaviour
         if (newValue)
         {
             Main.SetActive(false);
+        }
+        if (!newValue)
+        {
+            Main.SetActive(Endgame);
         }
     }
     private void GameIsReadyHandleChange(bool previousValue, bool newValue)

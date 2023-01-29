@@ -14,6 +14,7 @@ public class Managers : MonoBehaviour
     [SerializeField]
     private PlayerSO PlayerInstance;
     public static PlayerSO Player;
+    public static bool alreadyLogged = false;
     // Start is called before the first frame update
     private void Awake()
     {

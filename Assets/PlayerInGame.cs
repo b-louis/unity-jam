@@ -36,6 +36,7 @@ public class PlayerInGame : NetworkBehaviour
     public NetworkVariable<bool> alive = new NetworkVariable<bool>(false);
     public NetworkVariable<PlayerSerializedData> PlayerDataS;
     private NetworkVariable<FixedString32Bytes> displayName = new NetworkVariable<FixedString32Bytes>();
+    private List<Color> PlayerColors = new List<Color>();
     private RelativeMovement rm;
     //public NetworkVariable<float> health = new NetworkVariable<float>(100f);
 
@@ -43,6 +44,9 @@ public class PlayerInGame : NetworkBehaviour
     // Start is called before the first frame update
     private void OnEnable()
     {
+        PlayerColors.Add(Color.blue);
+        PlayerColors.Add(Color.red);
+
         displayName.OnValueChanged += HandleDisplayNameChanged;
         health.OnValueChanged += HandleHealthChanged;
         alive.OnValueChanged += HandleAliveChanged;
@@ -59,12 +63,21 @@ public class PlayerInGame : NetworkBehaviour
         health.OnValueChanged -= HandleHealthChanged;
         alive.OnValueChanged -= HandleAliveChanged;
     }
-    void Start()
+    private void Update()
     {
-        //if (!IsOwner) return;
+        if (!IsOwner) return;
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            SucideServerRpc();
+        };
         
     }
-
+    [ServerRpc(RequireOwnership = false)]
+    public void SucideServerRpc()
+    {
+        //if (!IsOwner) return;
+        Hurt(100);
+    }
     // Update is called once per frame
     public void Hurt(int damage)
     {
@@ -90,11 +103,15 @@ public class PlayerInGame : NetworkBehaviour
         /*        if (!IsOwner) return;
         */
         SpawnServerRpc();
-        PlayerText.text = "You";
+        //
         var Renderer = GetComponentInChildren<Renderer>();
 
         // Call SetColor using the shader property name "_Color" and setting the color to red
-        Renderer.material.SetColor("_Color", Color.green);
+        if (IsOwner)
+        {
+            Renderer.material.SetColor("_Color", PlayerColors[0]);
+            PlayerText.text = "You";
+        }
         //PlayerText.text = displayName.Value.ToString();
         PlayerHealth.text = health.Value.ToString();
         Spawn();

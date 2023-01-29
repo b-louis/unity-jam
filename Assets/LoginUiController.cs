@@ -14,6 +14,10 @@ public class LoginUiController : MonoBehaviour
     private TMP_InputField Password;
     [SerializeField]
     private TextMeshProUGUI ErrorText;
+    [SerializeField]
+    private Button LoginButton;
+    [SerializeField]
+    private Button SignButton;
     // Start is called before the first frame update
     [SerializeField]
     private GameObject LoginPage, 
@@ -22,7 +26,16 @@ public class LoginUiController : MonoBehaviour
     private void Start()
     {
         _allPages = new List<GameObject>() { LoginPage, MainPage };
-        ChangePage(LoginPage);
+        if (Managers.alreadyLogged)
+        {
+            ChangePage(MainPage);
+            Managers.GameEvents.LoginEvent.Invoke();
+
+        }
+        else
+        {
+            ChangePage(LoginPage);
+        }
     }   
     private void Awake()
     {
@@ -39,15 +52,25 @@ public class LoginUiController : MonoBehaviour
 
         //await Managers.Metafab.TransfertCurrensy("0xc33985f2f4F3DD9be94360b75f227Ab866CA39c5", 10);
         ErrorText.text  = response == 0 ? "Hi "+Username.text : "Credentials invalid, please retry." ;
+        if (response == 1) return;
         Debug.Log("Submit");
+        Managers.alreadyLogged = true;
+        LoginButton.interactable = false;
+        SignButton.interactable = false;
         Managers.GameEvents.LoginEvent.Invoke();
     }
+
+
     public async void OnSignIn()
     {
         int response = await Managers.Metafab.CreatePlayer(Username.text, Password.text);
 
         ErrorText.text = response == 0 ? "Hi " + Username.text : "Credentials invalid, please retry.";
+        if (response == 1) return;
         Debug.Log("Submit");
+        Managers.alreadyLogged = true;
+        LoginButton.interactable = false;
+        SignButton.interactable = false;
         Managers.GameEvents.LoginEvent.Invoke();
     }
 
@@ -57,7 +80,7 @@ public class LoginUiController : MonoBehaviour
         {
             page.SetActive(false);
         }
-
+        Debug.Log("Change Page");
         new_page.SetActive(true);
     }
 }

@@ -12,6 +12,12 @@ public class GameSceneManager : MonoBehaviour
     public void GoGame()
     {
         SceneManager.LoadScene("Game");
+        Relog();
+    }
 
+    public void Relog()
+    {
+        //int response = await Managers.Metafab.AuthPlayer(Managers.Player.Username, Managers.Player.Password);
+        Managers.GameEvents.LoginEvent.Invoke();
     }
 }
