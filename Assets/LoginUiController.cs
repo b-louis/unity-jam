@@ -36,6 +36,8 @@ public class LoginUiController : MonoBehaviour
     public async void OnLogin()
     {
         int response = await Managers.Metafab.AuthPlayer(Username.text, Password.text);
+
+        //await Managers.Metafab.TransfertCurrensy("0xc33985f2f4F3DD9be94360b75f227Ab866CA39c5", 10);
         ErrorText.text  = response == 0 ? "Hi "+Username.text : "Credentials invalid, please retry." ;
         Debug.Log("Submit");
         Managers.GameEvents.LoginEvent.Invoke();

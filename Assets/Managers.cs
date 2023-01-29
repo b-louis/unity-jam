@@ -4,11 +4,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(MetafabManager))]
 [RequireComponent(typeof(GameEventsManager))]
+[RequireComponent(typeof(GameSceneManager))]
 
 public class Managers : MonoBehaviour
 {
     public static MetafabManager Metafab;
     public static GameEventsManager GameEvents;
+    public static GameSceneManager GameSceneManager;
     [SerializeField]
     private PlayerSO PlayerInstance;
     public static PlayerSO Player;
@@ -16,6 +18,8 @@ public class Managers : MonoBehaviour
     private void Awake()
     {
         GameEvents = GetComponent<GameEventsManager>();
+        GameSceneManager = GetComponent<GameSceneManager>();
+        DontDestroyOnLoad(gameObject);
     }
     void Start()
     {

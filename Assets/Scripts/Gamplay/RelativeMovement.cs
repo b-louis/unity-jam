@@ -37,15 +37,19 @@ public class RelativeMovement : NetworkBehaviour {
 	public Vector3 mousePoint;
 	private bool spawning = true;
 	private Vector3 spawnpoint;
-	// Use this for initialization
-	void Start() {
+    // Use this for initialization
+/*    private void OnEnable()
+    {
+		this.enabled = false;
+    }*/
+    void Start() {
 		vertSpeed = minFall;
 		cam = Camera.main;
 		charController = GetComponent<CharacterController>();
 		animator = GetComponent<Animator>();
 		pig = GetComponent<PlayerInGame>();
 	}
-	public void Spawn(Vector3 pos)
+/*	public void Spawn(Vector3 pos)
     {
 		spawning = true;
 		spawnpoint = pos;
@@ -58,7 +62,7 @@ public class RelativeMovement : NetworkBehaviour {
 		spawning = false;
 
 
-	}
+	}*/
 	// Update is called once per frame
 	void Update() {
 
@@ -71,11 +75,11 @@ public class RelativeMovement : NetworkBehaviour {
         {
 			return;
         }
-        if (spawning && false)
+/*        if (spawning && false)
 		{
 			charController.transform.position = spawnpoint;
 			return;
-		}
+		}*/
 
 		// Mouse rotation
 		Vector3 mousePos = Input.mousePosition;

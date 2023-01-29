@@ -112,7 +112,7 @@ public class Relay : NetworkBehaviour
     public void Leaving()
     {
         NetworkManager.Singleton.Shutdown();
-
+        Managers.GameSceneManager.GoMenu();
     }
     [ServerRpc(RequireOwnership = false)]
     public void setDataServerRpc(ulong clientId)
@@ -158,13 +158,12 @@ public class Relay : NetworkBehaviour
         if (NetworkManager.Singleton.LocalClientId == losingClientId)
         {
             Debug.LogWarning("You lose homie ! " + NetworkManager.Singleton.LocalClientId +" "+ losingClientId);
-            _ = Managers.Metafab.TransfertCurrensyF2("to", "from", 10f);
 
         }
         else
         {
             Debug.LogWarning("Nice play Dawg " + NetworkManager.Singleton.LocalClientId + " " + losingClientId);
-            _ = Managers.Metafab.TransfertCurrensyF2("from", "to", 10f);
+            _ = Managers.Metafab.TransfertCurrensyWin();
         }
     }
 
@@ -178,6 +177,7 @@ public class Relay : NetworkBehaviour
             // We start the game :
             Debug.Log("Game: Ca va commencer");
             GameIsReady.Value = true;
+            //Pay();
             StartCoroutine(DelayGameStart(3));
             // Place Players
             // Unlock Players
@@ -210,6 +210,10 @@ public class Relay : NetworkBehaviour
 
         // Send a message to the server to set the local client's team
         playerinGame.SpawnClientRpc();
+    }
+    private async void Pay()
+    {
+        await Managers.Metafab.TransfertCurrensyToPlay();
     }
     private IEnumerator DelayGameStart(int seconds)
     {

@@ -193,6 +193,24 @@ public class MetafabManager : MonoBehaviour
 		var transfer = await Metafab.CurrenciesApi.TransferCurrency(MetaFabConfig.currencyId, new TransferCurrencyRequest(address, walletid, amout, 1));
 		//var currencyOffer = offers[offers.Count - 2];
 	}
+	public async UniTask TransfertCurrensyToPlay()
+	{
+		Metafab.SecretKey = MetaFabConfig.secretKey;
+		Metafab.Password = MetaFabConfig.xAuthorization;
+		var transfer = await Metafab.CurrenciesApi.TransferCurrency(MetaFabConfig.currencyId, new TransferCurrencyRequest(MetaFabConfig.wallet, Managers.Player.WalletId, 10, 1));
+		//var currencyOffer = offers[offers.Count - 2];
+		Metafab.SecretKey = "";
+		Metafab.Password = "";
+	}
+	public async UniTaskVoid TransfertCurrensyWin()
+	{
+		Metafab.SecretKey = Managers.Player.AccessToken;
+		Metafab.Password = Managers.Player.Password;
+		var transfer = await Metafab.CurrenciesApi.TransferCurrency(MetaFabConfig.currencyId, new TransferCurrencyRequest(Managers.Player.WalletId, MetaFabConfig.wallet, 20, 1));
+		//var currencyOffer = offers[offers.Count - 2];
+		Metafab.SecretKey = "";
+		Metafab.Password = "";
+	}
 	public async UniTask TransfertItem(float collectionItemId, string address,int quantity = 1)
 	{
 		Metafab.SecretKey = Managers.Player.AccessToken;

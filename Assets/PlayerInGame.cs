@@ -46,7 +46,10 @@ public class PlayerInGame : NetworkBehaviour
         displayName.OnValueChanged += HandleDisplayNameChanged;
         health.OnValueChanged += HandleHealthChanged;
         alive.OnValueChanged += HandleAliveChanged;
+
         rm = GetComponent<RelativeMovement>();
+
+
 
     }
 
@@ -87,14 +90,27 @@ public class PlayerInGame : NetworkBehaviour
         /*        if (!IsOwner) return;
         */
         SpawnServerRpc();
-        PlayerText.text = displayName.Value.ToString();
+        PlayerText.text = "You";
+        var Renderer = GetComponentInChildren<Renderer>();
+
+        // Call SetColor using the shader property name "_Color" and setting the color to red
+        Renderer.material.SetColor("_Color", Color.green);
+        //PlayerText.text = displayName.Value.ToString();
         PlayerHealth.text = health.Value.ToString();
         Spawn();
     }
     public void Spawn()
     {
+        rm.enabled = false;
         Vector3 pos = Relay.Singleton.Spawns[(int)NetworkManager.Singleton.LocalClientId];
-        rm.Spawn(pos);
+        transform.position = pos;
+        StartCoroutine(SpawnWait());
+    }
+
+    IEnumerator SpawnWait()
+    {
+        yield return new WaitForSeconds(2f);
+        rm.enabled = true;
 
     }
     [ServerRpc(RequireOwnership =false)]
@@ -115,7 +131,7 @@ public class PlayerInGame : NetworkBehaviour
     [ServerRpc]
     private void ChangeNameServerRpc(PlayerData playerData)
     {
-        displayName.Value = playerData.Username;
+        //displayName.Value = playerData.Username;
     }
 
     public override void OnNetworkSpawn()
@@ -145,7 +161,7 @@ public class PlayerInGame : NetworkBehaviour
     private void HandleDisplayNameChanged(FixedString32Bytes oldDisplayName, FixedString32Bytes newDisplayName)
     {
         PlayerText.text = newDisplayName.ToString();
-        displayName.Value = newDisplayName.ToString();
+        //displayName.Value = newDisplayName.ToString();
     }
     private void HandleHealthChanged(int oldValue, int newValue)
     {
