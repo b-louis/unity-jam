@@ -32,7 +32,6 @@ public class PlayerInGame : NetworkBehaviour
     public PlayerSO PlayerData;
     public TextMeshProUGUI PlayerText;
     public TextMeshProUGUI PlayerHealth;
-
     public NetworkVariable<int> health = new NetworkVariable<int>(10);
     public NetworkVariable<bool> alive = new NetworkVariable<bool>(false);
     public NetworkVariable<PlayerSerializedData> PlayerDataS;
@@ -82,33 +81,28 @@ public class PlayerInGame : NetworkBehaviour
         //if (!IsOwner) return;
         Hurt(damage);
     }
-    public void SpawnPos(Vector3 pos)
-    {
-        /*        if (!IsOwner) return;
-        */
-        rm.Spawn(pos);
-        health.Value = 10;
-        alive.Value = true;
-    }
     [ClientRpc]
-    public void SpawnPosClientRpc(Vector3 pos)
+    public void SpawnClientRpc()
     {
         /*        if (!IsOwner) return;
         */
-        rm.Spawn(pos);
-        health.Value = 10;
-        alive.Value = true;
+        SpawnServerRpc();
+        PlayerText.text = displayName.Value.ToString();
+        PlayerHealth.text = health.Value.ToString();
+        Spawn();
     }
     public void Spawn()
     {
-        if (!IsOwner) return;
-        health.Value = 10;
-        alive.Value = true;
+        Vector3 pos = Relay.Singleton.Spawns[(int)NetworkManager.Singleton.LocalClientId];
+        rm.Spawn(pos);
+
     }
-    [ServerRpc]
+    [ServerRpc(RequireOwnership =false)]
     public void SpawnServerRpc()
     {
-        Spawn();
+
+        health.Value = 10;
+        alive.Value = true;
     }
     private IEnumerator waitForData()
     {
@@ -135,16 +129,10 @@ public class PlayerInGame : NetworkBehaviour
         Relay.Singleton.setDataServerRpc(NetworkManager.Singleton.LocalClientId);
         Relay.Singleton.PlayerJoinServerRpc();
         StartCoroutine(waitForData());
-/*        Debug.Log(Relay.Singleton.clientData[0]);
-        Debug.Log(Relay.Singleton.clientData[1]);*/
+        /*        Debug.Log(Relay.Singleton.clientData[0]);
+                Debug.Log(Relay.Singleton.clientData[1]);*/
         //RelativeMovement rm = GetComponent<RelativeMovement>();
-        Vector3 pos = Relay.Singleton.Spawns[(int)NetworkManager.Singleton.LocalClientId];
-        rm.Spawn(pos);
-        Debug.Log("SPAXN : " + Relay.Singleton.Spawns[(int)NetworkManager.Singleton.LocalClientId]);
-        Debug.Log("SPAXN1 : " + Relay.Singleton.Spawns[0]);
-        Debug.Log("SPAXN2 : " + Relay.Singleton.Spawns[1]);
-        Debug.Log("SPAXN3 : " + (int)NetworkManager.Singleton.LocalClientId);
-        Spawn();
+        SpawnServerRpc();
 
 
     }
@@ -157,6 +145,7 @@ public class PlayerInGame : NetworkBehaviour
     private void HandleDisplayNameChanged(FixedString32Bytes oldDisplayName, FixedString32Bytes newDisplayName)
     {
         PlayerText.text = newDisplayName.ToString();
+        displayName.Value = newDisplayName.ToString();
     }
     private void HandleHealthChanged(int oldValue, int newValue)
     {

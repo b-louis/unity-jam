@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -12,9 +13,28 @@ public class ShootBehavior : NetworkBehaviour
     private GameObject _projectile;
 
     public float RateOfFire;
-    public bool canShoot = true;
+    public bool canShoot = false;
     // Start is called before the first frame update
     // Update is called once per frame
+    private void OnEnable()
+    {
+        Relay.Singleton.GameStarted.OnValueChanged += GameStartedHandleChange;
+    }
+
+    private void OnDisable()
+    {
+        Relay.Singleton.GameStarted.OnValueChanged -= GameStartedHandleChange;
+    }
+    private void GameStartedHandleChange(bool previousValue, bool newValue)
+    {
+        StartCoroutine(WaitToShoot(newValue));
+    }
+    IEnumerator WaitToShoot(bool value)
+    {
+        yield return new WaitForSeconds(2);
+        canShoot = value;
+
+    }
     void Update()
     {
         if (!IsOwner) return;
@@ -36,7 +56,7 @@ public class ShootBehavior : NetworkBehaviour
     private void ShootServerRpc()
     {
         _projectile = Instantiate(projectilePrefab) as GameObject;
-        _projectile.transform.position = transform.TransformPoint(Vector3.forward * 1.5f);
+        _projectile.transform.position = transform.TransformPoint(Vector3.forward * 3.5f);
         _projectile.transform.rotation = transform.rotation;
         _projectile.GetComponent<NetworkObject>().Spawn();
     }

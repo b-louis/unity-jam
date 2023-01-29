@@ -67,11 +67,11 @@ public class RelativeMovement : NetworkBehaviour {
 
 			if (!IsOwner) return;
         }
-        if (!pig.alive.Value)
+        if (!pig.alive.Value && false)
         {
 			return;
         }
-        if (spawning)
+        if (spawning && false)
 		{
 			charController.transform.position = spawnpoint;
 			return;
@@ -82,7 +82,7 @@ public class RelativeMovement : NetworkBehaviour {
 		//Vector3 mousePoint = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 20));
 		//mousePoint.y = transform.position.y;
 		LayerMask mask = LayerMask.GetMask("Ground");
-		Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+		Ray ray = cam.ScreenPointToRay(mousePos);
 		RaycastHit mouseHit;
 		/*		RaycastHit[] hits;
 				hits = Physics.RaycastAll(transform.position, transform.forward, 100.0F);*/

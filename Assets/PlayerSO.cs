@@ -10,7 +10,10 @@ public class PlayerSO : ScriptableObject
     public string loadout;
     public string WalletId;
     public string WalletAdress;
-    public float Balance;
+    public float Balance; 
+    public int weapon;
+    public int shades;
+    public int hat;
 
     public string Password { get; internal set; }
 }

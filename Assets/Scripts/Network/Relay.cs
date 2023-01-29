@@ -141,6 +141,7 @@ public class Relay : NetworkBehaviour
     [ServerRpc(RequireOwnership =false)]
     public void EndingGameServerRpc(ulong losingClientId) 
     {
+        GameStarted.Value = false;
         EndingGameClientRpc(losingClientId);
     }
 
@@ -167,7 +168,7 @@ public class Relay : NetworkBehaviour
             // We start the game :
             Debug.Log("Game: Ca va commencer");
 
-            StartCoroutine(MyWaitForSec(3));
+            StartCoroutine(DelayGameStart(3));
             // Place Players
             // Unlock Players
 
@@ -180,10 +181,10 @@ public class Relay : NetworkBehaviour
     {
         PlacePlayer(0);
         PlacePlayer(1);
+        GameStarted.Value = true;
     }
     public void PlacePlayer(ulong clientId)
     {
-        Debug.LogError("geegeg "+ clientId);
 
         if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient networkClient))
         {
@@ -198,11 +199,12 @@ public class Relay : NetworkBehaviour
         }
 
         // Send a message to the server to set the local client's team
-        playerinGame.SpawnPosClientRpc(Spawns[(int)clientId]);
+        playerinGame.SpawnClientRpc();
     }
-    private IEnumerator MyWaitForSec(int seconds)
+    private IEnumerator DelayGameStart(int seconds)
     {
         yield return new WaitForSeconds(seconds);
         Debug.Log("Game: Ca commence");
+        RematchServerRpc();
     }
 }

@@ -555,7 +555,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 287243c07729e414ab7e5ebeb4c1041f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -952,6 +952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 5245006748748347709, guid: 6e1802c63d7f99540a0c9017e7b19385, type: 3}
   RateOfFire: 0
+  canShoot: 0
 --- !u!114 &8061510277438821380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1007,6 +1008,11 @@ MonoBehaviour:
   PlayerData: {fileID: 11400000, guid: f27ff7aaa623e7c4a8d39809f2924c74, type: 2}
   PlayerText: {fileID: 1954117528}
   PlayerHealth: {fileID: 1567438326}
+  health:
+    m_InternalValue: 10
+  alive:
+    m_InternalValue: 0
+  ownerId: 0
 --- !u!1 &7162608471518909833
 GameObject:
   m_ObjectHideFlags: 0

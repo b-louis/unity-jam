@@ -113,7 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 20
   DestroyTime: 2
-  Damage: 5
+  Damage: 1
   Stop: 0
 --- !u!114 &1990952270023857002
 MonoBehaviour:

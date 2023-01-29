@@ -7,14 +7,27 @@ public class ProjectileBehavior : NetworkBehaviour
 {
     public float Speed = 20.0f;
     public float DestroyTime = 2f;
-    public int Damage = 5;
+    public int Damage = 1;
+    public int type = 0;
     public bool Stop = false;
     // Start is called before the first frame update
     void Start()
     {
         //StartCoroutine(DestroyNetworkObject(DestroyTime));
     }
+    private void OnEnable()
+    {
+        Relay.Singleton.GameStarted.OnValueChanged += GameStartedHandleChange;
+    }
 
+    private void OnDisable()
+    {
+        Relay.Singleton.GameStarted.OnValueChanged -= GameStartedHandleChange;
+    }
+    private void GameStartedHandleChange(bool previousValue, bool newValue)
+    {
+        DestroyObjectServerRpc();
+    }
     // Update is called once per frame
     void Update()
     {
