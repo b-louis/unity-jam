@@ -156,11 +156,11 @@ public class RelativeMovement : NetworkBehaviour {
 
 		// DASH 
 		// Dash Mecanics
-		if (Input.GetButtonDown("Jump") && _canDash)
+/*		if (Input.GetButtonDown("Jump") && _canDash)
 		{
 			Debug.Log("I'm dashin");
 			StartCoroutine(Dashing());
-		}
+		}*/
 
 	}
 

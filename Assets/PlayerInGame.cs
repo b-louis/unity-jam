@@ -52,12 +52,6 @@ public class PlayerInGame : NetworkBehaviour
         alive.OnValueChanged += HandleAliveChanged;
 
         rm = GetComponent<RelativeMovement>();
-        Debug.LogError("sono");
-        ManagersInGame.SoundManager.PlayOnceServerRpc(
-        "death"
-        );
-
-
     }
 
     private void OnDisable()

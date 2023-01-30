@@ -71,6 +71,7 @@ public class LoginUiController : MonoBehaviour
         Managers.alreadyLogged = true;
         LoginButton.interactable = false;
         SignButton.interactable = false;
+        await Managers.Metafab.MintforPlayer();
         Managers.GameEvents.LoginEvent.Invoke();
     }
 

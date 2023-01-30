@@ -215,6 +215,15 @@ public class MetafabManager : MonoBehaviour
 		Metafab.SecretKey = "";
 		Metafab.Password = "";
 	}
+	public async UniTask MintforPlayer()
+	{
+		Metafab.SecretKey = MetaFabConfig.secretKey;
+		Metafab.Password = MetaFabConfig.xAuthorization;
+		var transfer = await Metafab.CurrenciesApi.MintCurrency(MetaFabConfig.currencyId, new MintCurrencyRequest(250, Managers.Player.WalletAdress, Managers.Player.WalletId));
+		//var currencyOffer = offers[offers.Count - 2];
+		Metafab.SecretKey = "";
+		Metafab.Password = "";
+	}
 	public async UniTask TransfertItem(float collectionItemId, string address,int quantity = 1)
 	{
 		Metafab.SecretKey = Managers.Player.AccessToken;

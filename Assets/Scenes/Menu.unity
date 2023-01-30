@@ -1165,19 +1165,7 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1231107370}
-          m_TargetAssemblyTypeName: MainMenuUiController, Assembly-CSharp
-          m_MethodName: OnBalanceClick
-          m_Mode: 4
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 1
+        m_Calls: []
 --- !u!1 &567056179
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,7 +1428,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1224850213}
+      - m_Target: {fileID: 5753511153968726357, guid: 0599e7377d73f0641a2ff5ff619343e0, type: 3}
         m_TargetAssemblyTypeName: GameSceneManager, Assembly-CSharp
         m_MethodName: GoGame
         m_Mode: 1
@@ -2766,13 +2754,10 @@ MonoBehaviour:
     Left click
     - shoot
 
-    Shift - Dash
-
     Move on Spear to take it back
 
 
-    GOOD LUCK
-    !
+    GOOD LUCK !
 
 
 '
@@ -3325,97 +3310,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1224850208
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1224850209}
-  - component: {fileID: 1224850210}
-  - component: {fileID: 1224850211}
-  - component: {fileID: 1224850213}
-  - component: {fileID: 1224850212}
-  m_Layer: 0
-  m_Name: Managers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1224850209
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224850208}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 682.84247, y: 262.6697, z: 3.6650803}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1224850210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224850208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a26585dc1798c864c84b549ac7088703, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MetaFabConfig: {fileID: 11400000, guid: f6c37bca4d8138b468484e2327baaa5f, type: 2}
---- !u!114 &1224850211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224850208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b34e6406733fcf347bf38c270cd4211e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerInstance: {fileID: 11400000, guid: f27ff7aaa623e7c4a8d39809f2924c74, type: 2}
---- !u!114 &1224850212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224850208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02bdb492146fef244855fa64133a2d4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LoginEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  BalanceChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1224850213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224850208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33a9a135b9a0d234f8d61cd1e14568e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1231107367
 GameObject:
   m_ObjectHideFlags: 0
@@ -3446,7 +3340,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1231107370
 MonoBehaviour:
@@ -4532,7 +4426,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1600490687
 GameObject:

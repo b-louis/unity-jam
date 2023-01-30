@@ -55,6 +55,10 @@ public class Relay : NetworkBehaviour
     }
     public async UniTask<string> CreateRelay()
     {
+        if(Managers.Player.Balance < 10)
+        {
+            return "N";
+        }
         try
         {
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(1);
@@ -87,6 +91,10 @@ public class Relay : NetworkBehaviour
     }
     public async UniTask<int> JoinRelay(string joinCode)
     {
+        if (Managers.Player.Balance < 10)
+        {
+            return 2;
+        }
         try
         {
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
@@ -192,7 +200,7 @@ public class Relay : NetworkBehaviour
             // We start the game :
             Debug.Log("Game: Ca va commencer");
             GameIsReady.Value = true;
-            PayClientRpc();
+            //PayClientRpc();
             StartCoroutine(DelayGameStart(3));
             // Place Players
             // Unlock Players

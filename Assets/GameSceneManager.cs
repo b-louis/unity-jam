@@ -6,6 +6,7 @@ public class GameSceneManager : MonoBehaviour
 {
     public void GoMenu()
     {
+        Debug.Log("Menu");
         SceneManager.LoadScene("Menu");
     }
 
